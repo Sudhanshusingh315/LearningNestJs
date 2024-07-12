@@ -1,9 +1,20 @@
-import { Controller, Get, Post } from '@nestjs/common';
-
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { CreateUserDto } from './dto/creat-user.dto';
 @Controller('users')
 export class UsersController {
   @Get() // Get /users/
-  getUsers() {
+  getUsers(@Query('sortBy') sortBy: string) {
+    console.log(`You need to sort with ${sortBy}`);
     return { username: 'Anson', email: 's826063@gmail.com' };
   }
 
@@ -31,5 +42,16 @@ export class UsersController {
   }
 
   @Post('posts') // Post /users/posts
-  createUser() {}
+  //   you should now put empty objects, you use dto and validation here
+
+  // there is also one another way to doing this that is
+  //   @UsePipes(new ValidationPipe())
+  createUser(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+    return createUserDto;
+  }
+
+  @Get(':id')
+  getUserById(@Param('id', ParseIntPipe) id: string) {
+    return id;
+  }
 }
