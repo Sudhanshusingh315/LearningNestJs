@@ -4,15 +4,23 @@ import { Model } from 'mongoose';
 import { User } from 'src/schemas/User.schema';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
+import { UserSettings } from 'src/schemas/UserSettings.schema';
 @Injectable()
 export class UsersService {
   constructor(
     // every class will have a name property attached to it
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(UserSettings.name) private userSettings: Model<UserSettings>,
   ) {}
 
-  createUser(createUserDto: CreateUserDto) {
-    const newUser = new this.userModel(createUserDto);
+  async createUser(settings, createUserDto: CreateUserDto) {
+    const settingsResponse = new this.userSettings(settings);
+
+    console.log(`Settings saved ${settingsResponse}`);
+    const newUser = new this.userModel({
+      ...createUserDto,
+      settings: settingsResponse._id,
+    });
     return newUser.save();
   }
 

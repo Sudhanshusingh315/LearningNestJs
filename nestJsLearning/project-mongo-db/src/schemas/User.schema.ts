@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 
 @Schema()
 export class User {
@@ -10,6 +11,9 @@ export class User {
 
   @Prop({ required: false })
   avatarUrl?: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'UserSettings' })
+  settings: mongoose.Schema.Types.ObjectId;
 }
 
 // SchemaFactory turns the calss into Schema, otherwise nestjs wouldn't know

@@ -1,6 +1,5 @@
 import {
   Body,
-  ConsoleLogger,
   Controller,
   Delete,
   Get,
@@ -19,8 +18,10 @@ import { UpdateUserDto } from './dto/UpdateUser.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
-  createUser(@Body(ValidationPipe) createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+  createUser(
+    @Body(ValidationPipe) { settings, ...createUserDto }: CreateUserDto,
+  ) {
+    return this.usersService.createUser(settings, createUserDto);
   }
 
   @Get()
